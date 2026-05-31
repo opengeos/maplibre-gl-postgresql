@@ -1,53 +1,41 @@
 import { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import maplibregl, { Map } from 'maplibre-gl';
-import { PluginControlReact, usePluginState } from '../../src/react';
+import { PostgreSQLControlReact, usePostgreSQLState } from '../../src/react';
 import '../../src/index.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-/**
- * Main App component demonstrating the React integration
- */
 function App() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<Map | null>(null);
-  const { state, toggle } = usePluginState({ collapsed: false });
+  const { state, toggle } = usePostgreSQLState({ collapsed: false });
 
-  // Initialize the map
   useEffect(() => {
     if (!mapContainer.current) return;
 
     const mapInstance = new maplibregl.Map({
       container: mapContainer.current,
-      style: 'https://demotiles.maplibre.org/style.json',
-      center: [0, 0],
-      zoom: 2,
+      style: 'https://tiles.openfreemap.org/styles/positron',
+      center: [-74, 40.72],
+      zoom: 10,
     });
 
-    // Add navigation controls to top-right
     mapInstance.addControl(new maplibregl.NavigationControl(), 'top-right');
-
-    // Add fullscreen control to top-right (after navigation)
     mapInstance.addControl(new maplibregl.FullscreenControl(), 'top-right');
 
-    mapInstance.on('load', () => {
-      setMap(mapInstance);
-    });
+    mapInstance.on('load', () => setMap(mapInstance));
 
-    return () => {
-      mapInstance.remove();
-    };
+    return () => mapInstance.remove();
   }, []);
 
   const handleStateChange = (newState: typeof state) => {
-    console.log('Plugin state changed:', newState);
+    console.log('PostgreSQL state changed:', newState);
   };
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
 
-      {/* External toggle button */}
       <button
         onClick={toggle}
         style={{
@@ -67,13 +55,19 @@ function App() {
         {state.collapsed ? 'Expand' : 'Collapse'} Panel
       </button>
 
-      {/* Plugin control */}
       {map && (
-        <PluginControlReact
+        <PostgreSQLControlReact
           map={map}
-          title="React Plugin"
+          title="PostgreSQL"
           collapsed={state.collapsed}
-          panelWidth={320}
+          panelWidth={360}
+          apiBaseUrl="http://localhost:3000"
+          sourceId="default"
+          initialQuery={`SELECT *
+FROM "pg"."public"."features"
+LIMIT 1000`}
+          geometryColumn="geom"
+          geometryFormat="auto"
           onStateChange={handleStateChange}
         />
       )}
@@ -81,6 +75,5 @@ function App() {
   );
 }
 
-// Mount the app
 const root = createRoot(document.getElementById('root')!);
 root.render(<App />);

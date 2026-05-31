@@ -1,11 +1,18 @@
-// React entry point
-export { PluginControlReact } from './lib/core/PluginControlReact';
+export { PostgreSQLControlReact, PluginControlReact } from './lib/core/PostgreSQLControlReact';
 
-// React hooks
-export { usePluginState } from './lib/hooks';
+export { usePostgreSQLState, usePluginState } from './lib/hooks';
 
-// Re-export types for React consumers
 export type {
+  PostgreSQLControlOptions,
+  PostgreSQLState,
+  PostgreSQLControlReactProps,
+  PostgreSQLControlEvent,
+  PostgreSQLControlEventHandler,
+  PostgreSQLFeatureSelection,
+  PostgreSQLGeometryFormat,
+  PostgreSQLLayerState,
+  PostgreSQLSource,
+  PostgreSQLTable,
   PluginControlOptions,
   PluginState,
   PluginControlReactProps,

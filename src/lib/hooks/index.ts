@@ -1,1 +1,1 @@
-export { usePluginState } from './usePluginState';
+export { usePostgreSQLState, usePluginState } from './usePostgreSQLState';

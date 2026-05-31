@@ -1,7 +1,7 @@
 {
-  "name": "maplibre-gl-plugin-template",
-  "version": "0.2.2",
-  "description": "A template for creating MapLibre GL JS plugins with TypeScript and React support",
+  "name": "maplibre-gl-postgresql",
+  "version": "0.1.0",
+  "description": "A MapLibre GL JS control for querying and visualizing geospatial PostgreSQL data through DuckDB",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -27,7 +27,7 @@
         "default": "./dist/react.cjs"
       }
     },
-    "./style.css": "./dist/maplibre-gl-plugin-template.css"
+    "./style.css": "./dist/maplibre-gl-postgresql.css"
   },
   "files": [
     "dist",
@@ -41,6 +41,8 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.build.json && vite build",
     "build:examples": "vite build --config vite.examples.config.ts",
+    "server:build": "npm --prefix server run build",
+    "server:test": "npm --prefix server test",
     "preview": "vite preview",
     "test": "vitest --run",
     "test:ui": "vitest --ui",
@@ -53,16 +55,34 @@
     "maplibre",
     "maplibre-gl",
     "map",
+    "postgresql",
+    "postgres",
+    "duckdb",
+    "spatial",
+    "geospatial",
+    "geoarrow",
+    "deck.gl",
     "plugin",
     "control",
     "react",
     "typescript"
   ],
-  "author": "Your Name",
+  "author": "Qiusheng Wu",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/maplibre-gl-plugin-template.git"
+    "url": "https://github.com/opengeos/maplibre-gl-postgresql.git"
+  },
+  "dependencies": {
+    "@deck.gl/aggregation-layers": ">=9.3.2",
+    "@deck.gl/core": ">=9.3.2",
+    "@deck.gl/geo-layers": ">=9.3.2",
+    "@deck.gl/layers": ">=9.3.2",
+    "@deck.gl/mapbox": ">=9.3.2",
+    "@geoarrow/deck.gl-geoarrow": ">=0.4.1",
+    "@math.gl/polygon": ">=4.1.0",
+    "@walkthru-earth/objex-utils": ">=1.5.0",
+    "apache-arrow": ">=21.1.0"
   },
   "peerDependencies": {
     "maplibre-gl": ">=3.0.0",

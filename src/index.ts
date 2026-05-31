@@ -1,18 +1,24 @@
-// Import styles
 import './lib/styles/plugin-control.css';
 
-// Main entry point - Core exports
-export { PluginControl } from './lib/core/PluginControl';
+export { PostgreSQLControl, PluginControl } from './lib/core/PostgreSQLControl';
 
-// Type exports
 export type {
+  PostgreSQLColumn,
+  PostgreSQLControlEvent,
+  PostgreSQLControlEventHandler,
+  PostgreSQLControlOptions,
+  PostgreSQLFeatureSelection,
+  PostgreSQLGeometryFormat,
+  PostgreSQLLayerState,
+  PostgreSQLSource,
+  PostgreSQLState,
+  PostgreSQLTable,
   PluginControlOptions,
   PluginState,
   PluginControlEvent,
   PluginControlEventHandler,
 } from './lib/core/types';
 
-// Utility exports
 export {
   clamp,
   formatNumericValue,
@@ -21,3 +27,17 @@ export {
   throttle,
   classNames,
 } from './lib/utils';
+
+export {
+  buildCountQuery,
+  buildResultQuery,
+  buildTableQuery,
+  cleanSql,
+  detectGeometryColumn,
+  detectGeometryFormat,
+  escapeSource,
+  friendlyError,
+  quoteIdentifier,
+} from './lib/postgresql/utils';
+
+export type { PostgreSQLQueryRequest, PostgreSQLQueryResponse } from './lib/postgresql/api';
