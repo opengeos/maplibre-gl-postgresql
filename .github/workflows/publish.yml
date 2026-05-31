@@ -20,11 +20,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install server dependencies
+        run: npm --prefix server ci
+
       - name: Run tests
         run: npm test
 
+      - name: Run server tests
+        run: npm run server:test
+
       - name: Build
         run: npm run build
+
+      - name: Build server
+        run: npm run server:build
 
       - name: Publish to npm
         run: npx -y npm@latest publish --provenance --access public

@@ -1,80 +1,122 @@
 import type { Map } from 'maplibre-gl';
 
-/**
- * Options for configuring the PluginControl
- */
-export interface PluginControlOptions {
-  /**
-   * Whether the control panel should start collapsed (showing only the toggle button)
-   * @default true
-   */
-  collapsed?: boolean;
+export type PostgreSQLControlPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+export type PostgreSQLGeometryFormat = 'auto' | 'geometry' | 'wkb' | 'wkt';
 
-  /**
-   * Position of the control on the map
-   * @default 'top-right'
-   */
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-
-  /**
-   * Title displayed in the control header
-   * @default 'Plugin Control'
-   */
-  title?: string;
-
-  /**
-   * Width of the control panel in pixels
-   * @default 300
-   */
-  panelWidth?: number;
-
-  /**
-   * Custom CSS class name for the control container
-   */
-  className?: string;
+export interface PostgreSQLColumn {
+  name: string;
+  type: string;
+  nullable: boolean;
 }
 
-/**
- * Internal state of the plugin control
- */
-export interface PluginState {
-  /**
-   * Whether the control panel is currently collapsed
-   */
+export interface PostgreSQLTable {
+  schemaName: string;
+  tableName: string;
+  qualifiedName: string;
+  displayName: string;
+}
+
+export interface PostgreSQLSource {
+  id: string;
+  label: string;
+}
+
+export interface PostgreSQLFeatureSelection {
+  layerId: string;
+  layerName: string;
+  index: number;
+  properties: Record<string, unknown>;
+}
+
+export interface PostgreSQLLayerState {
+  id: string;
+  name: string;
+  beforeId: string | null;
+  query: string;
+  schema: PostgreSQLColumn[];
+  geometryColumn: string | null;
+  geometryFormat: Exclude<PostgreSQLGeometryFormat, 'auto'> | null;
+  totalRows: number;
+  loadedRows: number;
+}
+
+export interface PostgreSQLState {
   collapsed: boolean;
-
-  /**
-   * Current panel width in pixels
-   */
   panelWidth: number;
-
-  /**
-   * Any custom state data
-   */
-  data?: Record<string, unknown>;
+  apiBaseUrl: string;
+  sourceId: string | null;
+  sources: PostgreSQLSource[];
+  tables: PostgreSQLTable[];
+  selectedTable: string | null;
+  tableColumns: PostgreSQLColumn[];
+  query: string;
+  schema: PostgreSQLColumn[];
+  geometryColumn: string | null;
+  geometryFormat: PostgreSQLGeometryFormat;
+  resolvedGeometryFormat: Exclude<PostgreSQLGeometryFormat, 'auto'> | null;
+  pageSize: number;
+  totalRows: number;
+  loadedRows: number;
+  layer: PostgreSQLLayerState | null;
+  loading: boolean;
+  statusMessage: string;
+  error: string | null;
+  selectedFeature: PostgreSQLFeatureSelection | null;
+  pickable: boolean;
 }
 
-/**
- * Props for the React wrapper component
- */
-export interface PluginControlReactProps extends PluginControlOptions {
-  /**
-   * MapLibre GL map instance
-   */
+export interface PostgreSQLControlOptions {
+  collapsed?: boolean;
+  position?: PostgreSQLControlPosition;
+  title?: string;
+  panelWidth?: number;
+  className?: string;
+  apiBaseUrl?: string;
+  sourceId?: string;
+  initialQuery?: string;
+  geometryColumn?: string;
+  geometryFormat?: PostgreSQLGeometryFormat;
+  sourceCrs?: string;
+  targetCrs?: string;
+  pageSize?: number;
+  fitBoundsOnLoad?: boolean;
+  pickable?: boolean;
+  layerName?: string;
+  beforeId?: string;
+  interleaved?: boolean;
+}
+
+export interface PostgreSQLControlReactProps extends PostgreSQLControlOptions {
   map: Map;
-
-  /**
-   * Callback fired when the control state changes
-   */
-  onStateChange?: (state: PluginState) => void;
+  onStateChange?: (state: PostgreSQLState) => void;
+  onLoad?: (state: PostgreSQLState) => void;
+  onQuery?: (state: PostgreSQLState) => void;
+  onError?: (error: Error, state: PostgreSQLState) => void;
+  onSelect?: (selection: PostgreSQLFeatureSelection | null, state: PostgreSQLState) => void;
 }
 
-/**
- * Event types emitted by the plugin control
- */
-export type PluginControlEvent = 'collapse' | 'expand' | 'statechange';
+export type PostgreSQLControlEvent =
+  | 'collapse'
+  | 'expand'
+  | 'statechange'
+  | 'loadstart'
+  | 'progress'
+  | 'load'
+  | 'query'
+  | 'error'
+  | 'select';
 
-/**
- * Event handler function type
- */
-export type PluginControlEventHandler = (event: { type: PluginControlEvent; state: PluginState }) => void;
+export interface PostgreSQLControlEventData {
+  type: PostgreSQLControlEvent;
+  state: PostgreSQLState;
+  error?: Error;
+  selection?: PostgreSQLFeatureSelection | null;
+}
+
+export type PostgreSQLControlEventHandler = (event: PostgreSQLControlEventData) => void;
+
+export type PluginControlOptions = PostgreSQLControlOptions;
+export type PluginState = PostgreSQLState;
+export type PluginControlReactProps = PostgreSQLControlReactProps;
+export type PluginControlEvent = PostgreSQLControlEvent;
+export type PluginControlEventHandler = PostgreSQLControlEventHandler;

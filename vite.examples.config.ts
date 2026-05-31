@@ -7,7 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
-  base: '/maplibre-gl-plugin-template/',
+  base: '/maplibre-gl-postgresql/',
   build: {
     outDir: 'dist-examples',
     rollupOptions: {

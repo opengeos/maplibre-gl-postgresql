@@ -1,11 +1,11 @@
 # Examples
 
-This directory contains example implementations of the MapLibre GL Plugin Template.
+This directory contains example implementations of the MapLibre GL PostgreSQL control.
 
 ## Available Examples
 
 ### Basic Example
-A simple vanilla JavaScript/TypeScript example showing how to add the plugin control to a map.
+A vanilla TypeScript example showing how to add the PostgreSQL control to a map.
 
 ```bash
 # Run from project root
@@ -34,7 +34,11 @@ npm run dev
    npm run dev
    ```
 
-3. Open your browser and navigate to the example you want to view.
+3. Start the API server in another terminal with `npm --prefix server run dev`.
+
+4. Open your browser and navigate to the example you want to view.
+
+The examples expect a server source named `default` from `POSTGRESQL_SOURCES`.
 
 ## Building Examples
 
